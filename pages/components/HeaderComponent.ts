@@ -12,8 +12,9 @@ export class HeaderComponent {
         // page.locator()
         this.logo = page.getByRole('link', {name: 'Cybersoft'})
 
-        this.avatarBtn = page.locator('nav button.rounded-full')
-
+        // this.avatarBtn = page.locator('nav button.rounded-full')
+        // dùng xpath //img[@src='https://cdn-icons-png.flaticon.com/512/6596/6596121.png']
+        this.avatarBtn = page.locator('//img[@src="https://cdn-icons-png.flaticon.com/512/6596/6596121.png"]')
         // page.getByText('Đăng nhập')
         // page.locator('button:has-text("Đăng nhập")')
         this.loginBtn = page.getByRole('button', {name: 'Đăng nhập'})

@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "npx playwright test",
-    "example": "npx playwright test tests/example.spec.ts --headed"
+    "example": "npx playwright test tests/example.spec.ts --headed",
+    "login": "npx playwright test tests/auth/login.spec.ts --headed",
+    "register": "npx playwright test tests/auth/register.spec.ts --headed"
   },
   "keywords": [],
   "author": "",
@@ -13,5 +15,9 @@
   "devDependencies": {
     "@playwright/test": "^1.64.1",
     "@types/node": "^26.6.5"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^10.6.0",
+    "dotenv": "^18.0.9"
   }
 }
