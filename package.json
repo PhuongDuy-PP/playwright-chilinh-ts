@@ -7,14 +7,19 @@
     "test": "npx playwright test",
     "example": "npx playwright test tests/example.spec.ts --headed",
     "login": "npx playwright test tests/auth/login.spec.ts --headed",
-    "register": "npx playwright test tests/auth/register.spec.ts --headed"
+    "register": "npx playwright test tests/auth/register.spec.ts --headed",
+    "filter:headed": "npx playwright test tests/filter/filter.spec.ts --headed --project=chromium",
+    "allure:generate": "allure generate allure-results --clean -o allure-report",
+    "allure:open": "allure open allure-report"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@playwright/test": "^1.64.1",
-    "@types/node": "^26.6.5"
+    "@types/node": "^26.6.5",
+    "allure-commandline": "^2.46.1",
+    "allure-playwright": "^3.14.0"
   },
   "dependencies": {
     "@faker-js/faker": "^10.6.0",
