@@ -1,8 +1,8 @@
 import { faker } from "@faker-js/faker";
 
 export const validUser = {
-    email: process.env.TEST_EMAIL ?? '',
-    password: process.env.TEST_PASSWORD ?? ''
+    email: process.env.ADMIN_EMAIL ?? '',
+    password: process.env.ADMIN_PASSWORD ?? ''
 }
 
 export const invalidUser = {

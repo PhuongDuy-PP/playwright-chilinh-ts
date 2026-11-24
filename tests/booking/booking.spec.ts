@@ -1,5 +1,12 @@
-import { expect, test } from "../../fixtures/test-fixtures"
+import { expect, test as uiTest } from "../../fixtures/test-fixtures"
+import { test as apiTest } from "../../fixtures/api-fixtures"
 import { validUser } from "../../test-data/user"
+import { mergeTests } from "@playwright/test"
+import { getBooking, signin } from "../../utils/api-helper"
+
+// palywright sẽ hỗ trợ merge nhiều fixture lại với nhau, ví dụ: test ui + test api
+// => mergeTest
+const test = mergeTests(uiTest, apiTest)
 
 const ROOM_ID = 1
 
@@ -57,5 +64,47 @@ test.describe('Booking - Đã đăng nhập', () => {
         await expect(roomDetailPage.confirmModal).toContainText('Bạn có muốn đặt phòng')
         await expect(roomDetailPage.confirmModal).toContainText('Lượng khách: 02')
         await expect(roomDetailPage.confirmModal).toContainText(/Ngày sử dụng: \d{2}-\d{2}-\d{4} - \d{2}-\d{2}-\d{4}/)
+    })
+
+    // flow booking
+    // POST /api/phong-thue => tạo phòng thuê
+    // signin -> lấy userId để tra bookings của user đó
+    // user booking trên UI
+    // GET getBooking -> kiểm tra booking vừa tạo có trong danh sách booking của user hay không
+    // sau khi test xong => xóa booking vừa tạo để DB sạch
+    test("Xác nhận đặt phòng -> popup đóng và booking được lưu", async({api, mock, roomDetailPage}) => {
+        // tạo dữ liệu mock room
+        const room = await mock.room()
+        // dùng fixture để tạo dữ liệu mock room
+        const {user} = await signin(api, validUser.email, validUser.password)
+
+        // signin để lấy userId
+
+        // làm các bước auto bình thường
+        // B1: vào trang chi tiết phòng
+        // B2: thêm/bớt số khách
+        // B3: bấm đặt phòng
+        // B4: bấm xác nhận
+        // B4.1: kiểm tra popup đóng
+        try {
+            await roomDetailPage.gotoRoom(room.id)
+            await roomDetailPage.guestPlusBtn.click()
+            await roomDetailPage.bookBtn.click()
+            await roomDetailPage.confirmBtn.click()
+            await expect(roomDetailPage.confirmModal).toBeHidden()
+
+            // kiểm tra booking vừa được tạo có trong danh sách booking của user
+            const booking = await getBooking(api, user.id, room.id)
+            expect(booking.length).toBe(1)
+        } finally {
+            // xóa booking vừa tạo để DB sạch
+            const booking = await getBooking(api, user.id, room.id)
+            if (booking.length > 0) {
+                await api.delete(`/api/dat-phong/${booking[0].id}`)
+            }
+        }
+
+        // b5: kiểm tra data bằng API
+        // SAU KHI TEST XONG => xóa booking vừa tạo để DB sạch
     })
 })

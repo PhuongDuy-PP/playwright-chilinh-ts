@@ -12,7 +12,8 @@
     "allure:generate": "allure generate allure-results --clean -o allure-report",
     "allure:open": "allure open allure-report",
     "booking": "npx playwright test tests/booking/booking.spec.ts --headed --project=chromium",
-    "compare:ui:db": "npx playwright test tests/data/room-list-db.spec.ts"
+    "compare:ui:db": "npx playwright test tests/data/room-list-db.spec.ts",
+    "booking:fullflow": "npx playwright test tests/booking/booking.spec.ts --headed --project=chromium -g 'Xác nhận đặt phòng -> popup đóng và booking được lưu'"
   },
   "keywords": [],
   "author": "",
